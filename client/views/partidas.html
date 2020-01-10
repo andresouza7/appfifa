@@ -1,0 +1,48 @@
+
+<div class="container">
+	<ul class="nav nav-tabs">
+		<li role="presentation"><a href="#/dashboard"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a></li>
+		<li role="presentation" class="active"><a href="#/partidas"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Partidas</a></li>
+	</ul>
+	<div ng-controller="DashboardController as dashController">
+		<div class="panel panel-default" ng-init="dashController.verPartidas()">
+			<!-- <div class="panel-heading">
+				<h3 class="panel-title">Confrontos da liga</h3>
+			</div> -->
+			<div class="col">
+				<div class="table-responsive">
+					<table class="table ">
+						<thead>
+							<tr>
+								<th scope="col">Ordem</th>
+								<th scope="col">Jogador 1</th>
+								<th scope="col">J1 Gols</th>
+								<th scope="col">J2 Gols</th>
+								<th scope="col">Jogador 2</th>
+								<th scope="col">Status</th>
+							</tr>
+						</thead>
+						<tbody ng-init="dashController.verPartidaAtual()">
+							<tr ng-repeat="partida in dashController.partidas | orderBy:'ordem'" ng-class="{'match-finished': partida.encerrada, 'match-current': dashController.partidaAtual.ordem == partida.ordem}">
+								<!-- <td><div ng-class="item.nextRunAt ? '' : 'label label-success'">{{(item.nextRunAt ? item.nextRunAt : 'Executado') | date:'d/M/yy h:mm a'}}</div></td> -->
+								<!-- <td><a ng-href="#/servidor/{{item._id}}">{{item.nome}}</td></a> -->
+								<td>{{partida.ordem}}</td>
+								<td>{{partida.player1}}</td>
+								<td><b>{{partida.player1_gols}}</b></td>
+								<td><b>{{partida.player2_gols}}</b></td>
+								<td>{{partida.player2}}</td>
+								<td>
+									<!-- {{partida.encerrada ? 'sim' : 'não'}} -->
+									<span class="glyphicon glyphicon-ok" aria-hidden="true" ng-if="partida.encerrada && dashController.partidaAtual.ordem != partida.ordem"></span>
+									<span class="glyphicon glyphicon-hourglass" aria-hidden="true" ng-if="!partida.encerrada && dashController.partidaAtual.ordem != partida.ordem"></span>
+									<span class="glyphicon glyphicon-play" aria-hidden="true" ng-if="dashController.partidaAtual.ordem == partida.ordem"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+			
+</div>

@@ -1,0 +1,28 @@
+{
+  "name": "appdofifa",
+  "version": "1.0.0",
+  "description": "Personalizar torneio de fifa",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "harek",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.3",
+    "express-ejs-extend": "0.0.1",
+    "express-messages": "^1.0.1",
+    "express-session": "^1.15.3",
+    "express-validator": "^3.2.0",
+    "mongoose": "^4.10.2",
+    "node-schedule": "^1.2.5",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {}
+}

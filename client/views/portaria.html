@@ -1,0 +1,194 @@
+<script src='/js/tinymce/tinymce.min.js' referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: '#editor_conteudo',
+        plugins: "table | print | save | image | code | hr",
+        table_toolbar: "tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol",
+        language: 'pt_BR',
+        });
+</script>
+
+<div data-ng-controller="PortariaController as portController">
+    <form action="/api/portaria" method="post">
+        <div class="col col-lg-8">
+            <h4>Editor de texto | {{portController.modelo_atual.nome || 'Novo Documento'}}</h4>
+                <textarea id="editor_conteudo" name="editor_conteudo" style="height:600px">
+                
+                Hello, World!
+                Declaramos para os devidos fins que o servidor {nome}, ocupante do cargo de {cargo} lotado na {lotacao}, admitido pelo {doc_admissao} de {data_admissao} ...
+                </textarea><br>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target=".modal-listar-documentos">Abrir modelo</button>
+                <button type="button" class="btn btn-default" ng-click="portController.salvarModelo()">Salvar modelo</button>
+                <button type="button" class="btn btn-danger" ng-click="portController.excluirModelo()" ng-disabled="!portController.modelo_atual">Excluir modelo</button>
+        </div>
+        <div class="col col-lg-4">
+            <h4>Parâmetros</h4>
+            <div class="table-responsive" data-ng-init="portController.mapearTagsPageLoad()">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Tag</th>
+                            <th scope="col">Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in portController.lista_tags">
+                            <td>{{item.tag}}</td>
+                            <td><input type="text" ng-model="item.valor"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <button type="button" class="btn btn-primary" ng-click="portController.mapearTags()">Mapear tags</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-listar-servidores">Localizar servidor</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".modal-listar-servidores-tabela">Vários servidores</button>
+            <button type="button" class="btn btn-primary" ng-click="portController.substituirTags()">Substituir tags</button>
+        </div>
+    </form>
+    
+    <!-- Modal listar servidores -->
+    <div class="modal fade modal-listar-servidores" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Selecionar servidor</h4>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col col-md-6">
+                        <input type="text" placeholder="nome..." class="form-control" id="recipient-name" ng-model="input_servidor">
+                    </div>
+                    <div class="col col-md-6">
+                        <button type="button" class="btn btn-primary" ng-click="portController.pesquisarServidor(input_servidor)">Listar</button>
+                    </div>
+                </div>
+                <br><br>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Vínculo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="servidor in portController.lista_servidores | orderBy:'nome'">
+                                <td><a href="" ng-click="portController.definirServidor(servidor)" data-dismiss="modal">{{servidor.nome}}</a></td>
+                                <td>{{servidor.cargo}}</td>
+                                <td>{{servidor.vinculo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal listar servidores em tabela -->
+    <div class="modal fade modal-listar-servidores-tabela" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Selecionar vários servidores</h4>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col col-md-6">
+                        <input type="text" placeholder="nome..." class="form-control" id="recipient-name" ng-model="input_servidor">
+                    </div>
+                    <div class="col col-md-6">
+                        <button type="button" class="btn btn-primary" ng-click="portController.pesquisarServidor(input_servidor)">Listar</button>
+                    </div>
+                </div>
+                <br><br>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Vínculo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="servidor in portController.lista_servidores | orderBy:'nome'">
+                                <td><a href="" ng-click="portController.tabelaAdicionarServidor(servidor)">{{servidor.nome}}</a></td>
+                                <td>{{servidor.cargo}}</td>
+                                <td>{{servidor.vinculo}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col col-md-12">
+                    <h5>Campos disponíveis:</h5>
+                    <ul class="campo-tabela">
+                        <li ng-repeat="campo in portController.tabela_colunas | orderBy:'nome'">
+                            <a href="" ng-click="portController.tabelaAdicionarCampo(campo)" class="btn btn-primary btn-sm">{{campo}}</a>
+                        </li>
+                    </ul>
+                    <div class="col col-md-6">
+                        <h5>Servidores selecionados:</h5>
+                        <ul>
+                            <li ng-repeat="servidor in portController.servidores_selecionados | orderBy:'nome'">{{servidor.nome}}</li>
+                        </ul>
+                    </div>
+                    <div class="col col-md-6">
+                        <h5>Colunas selecionados:</h5>
+                        <ul>
+                            <li ng-repeat="coluna in portController.tabela_campos">{{coluna}}</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" ng-click="portController.tabelaServidores()" data-dismiss="modal">Inserir Tabela</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal listar modelos de documentos -->
+    <div class="modal fade modal-listar-documentos" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Selecionar modelo</h4>
+                </div>
+                <br>
+                <div class="form-group">
+                    <div class="col col-md-6">
+                        <input type="text" placeholder="nome..." class="form-control" id="recipient-name" ng-model="input_servidor">
+                    </div>
+                    <div class="col col-md-6">
+                        <button type="button" class="btn btn-primary" ng-click="portController.listarModelos()">Listar</button>
+                    </div>
+                </div>
+                <br><br>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Última alteração por</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="modelo in portController.lista_modelos | orderBy:'nome'">
+                                <td><a href="" ng-click="portController.definirModelo(modelo)" data-dismiss="modal">{{modelo.nome}}</a></td>
+                                <td>{{modelo.usuario}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

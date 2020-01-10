@@ -1,0 +1,215 @@
+<div class="container">
+   <div ng-controller="ServidorController as servController" ng-init="servController.pegarIdServidor()">
+
+        <div class="panel panel-default" ng-init="servController.pesquisarServidor()">
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <!-- <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive" style="width:250px;height:250px">  -->
+                    <!-- <img alt="User Pic" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg" id="profile-image1" class="img-circle img-responsive" style="width:250px;height:250px"> -->
+                    <div class="row">
+                        <br>
+                            <div class="col-md-12 col-md-offset-1">
+                                <img src = "{{servController.fotoServidor}}" class="img-circle img-responsive" style="width:200px;height:200px;border-width: 5px;border-style: solid;border-color: rgb(11, 199, 105);">  
+                            </div>
+                            <div class="text-center"><a ng-href="#/servidor_config/{{servController.id_servidor}}"><span class="glyphicon glyphicon-edit"></span> Alterar dados</a></div>
+                        </div>
+                    
+                </div>
+                <div class="col-md-9">
+                    <div class="container">
+                        <h3>{{servController.servidor.nome}}</h3>
+                        <p><b>{{servController.servidor.cargo | uppercase}}</b></p>				
+                    </div>
+                    <hr>
+                    <div class="col-md-6">
+                        <ul class="list-group device-box">
+                            <li class="list-group-item device-box">
+                                </span> <label> Matrícula:</label> {{servController.servidor.matricula}}
+                            </li>
+                            <li class="list-group-item device-box">
+                                </span> <label> CPF:</label> {{servController.servidor.cpf}}
+                            </li>
+                            <li class="list-group-item device-box">
+                                </span> <label> Data Início:</label> {{servController.servidor.data_inicio}}
+                            </li>
+                            <li class="list-group-item device-box">
+                                </span> <label> Data Fim:</label> {{servController.servidor.data_fim}}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <li class="list-group-item device-box">
+                            </span> <label> Lotação:</label> {{servController.servidor.lotacao}}
+                        </li>
+                        <li class="list-group-item device-box">
+                            </span> <label> Cargo:</label> {{servController.servidor.cargo}}
+                        </li>
+                        <li class="list-group-item device-box">
+                            </span> <label> Relação de vínculo:</label> {{servController.servidor.vinculo}}
+                        </li>
+                        <li class="list-group-item device-box">
+                            </span> <label> Nível/Ref:</label> {{servController.servidor.nivel}}
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    
+        <!-- 
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Dados do servidor</h3>
+            </div>
+            <div class="panel-body" ng-controller="UsersController as usersController" ng-init="usersController.getCookieData()">
+                <div class="row">
+                    <h1 class="text-center display-4 my-4">{{servController.servidor.nome}}</h1>
+                    <ul class="list-group device-box">
+                        <li class="list-group-item device-box">
+                            <span class="glyphicon glyphicon-user"></span> <label>Servidor: </label>
+                            {{servController.servidor.nome}}
+                        </li>
+                        <li class="list-group-item device-box">
+                                <span class="glyphicon glyphicon-info-sign"></span> <label>Cargo: </label>
+                                {{servController.servidor.cargo}}
+                        </li>
+                    </ul>
+                    <hr>
+                    <form action="/api/upload" method="POST" enctype="multipart/form-data">
+                        <label for="file" class="custom-file-label">Salvar um documento</label>
+                        <input type="file" name="file" id="file" class="custom-file-input"> <br>
+                        Nome: <input type="text" name="doc_name" id="doc_name"> <br>
+                        Descrição: <input type="text" name="doc_description">
+                        <input type="submit" value="Salvar documento" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div> -->
+        
+        <!-- trakcing style timeline start -->
+        <div class="row">
+            <div class="col-xs-6">
+                    <label>Filtrar documentos:</label>
+                    <input type="text" class="form-control" placeholder="Nome ou descrição..." ng-model="searchText">
+            </div>
+            <div class="col-xs-6">
+                <div class="pull-right">
+                <button class="btn btn-primary" 
+                type="button" 
+                data-toggle="collapse" 
+                data-target="#collapseNewDevice" 
+                aria-expanded="false" 
+                aria-controls="collapseNewDevice"><span class="glyphicon glyphicon-plus"></span> 
+                Adicionar um documento
+                </button>
+                </div>
+            </div>
+        </div>
+        <div class="collapse" id="collapseNewDevice">
+            <div class="well">
+                <form name="novoDocumentoForm" action="{{'/api/upload/' + servController.id_servidor}}" method="POST" enctype="multipart/form-data">
+                    <p>
+                    <label for="file" class="custom-file-label">*Arquivo</label>
+                    <input type="file" name="file" id="file" class="custom-file-input" required> 
+                    <h5>*Nome:</h5>
+                    <input type="text" name="doc_name" id="doc_name" ng-model="servController.novo_documento.nome" required>
+                    <h5>Descrição:</h5>
+                    <textarea rows="4" cols="50" name="doc_description" ng-model="servController.novo_documento.descricao"></textarea>
+                    <h5>Tag (Categoria):</h5>
+                    <select ng-model="doc_tag" name="doc_tag">
+                    <option ng-repeat="x in servController.tags | orderBy:'x'">{{x}}</option>
+                    </select>
+                    <h5>Data do fato</h5>
+                    <input 
+                    moment-picker="doc_data" 
+                    format="DD/MM/YYYY"
+                    locale="pt-br"
+                    disable=""
+                    ng-required=""
+                    ng-model="doc_data" 
+                    ng-model-options="{ updateOn: 'blur' }"
+                    name="doc_data" placeholder="Selecionar data">
+                    <!-- <button type="button" ng-click="servController.debug()">debug</button> -->
+                </p>
+                <p><input type="submit" value="Salvar documento" class="btn btn-primary btn-block"></p>
+                <!-- <div>
+                    <button type="submit" class="btn btn-success" data-toggle="collapse" data-target="#collapseNewDevice" ng-disabled="newDeviceForm.$invalid" ng-click="devController.addDevice()">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Salvar
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#collapseNewDevice">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancelar
+                    </button>
+                </div> -->
+                </form>
+            </div>
+        </div>
+    <br>
+
+        <div id="tracking-pre"></div>
+        <div id="tracking" ng-init="servController.listarDocumentos()">
+            <div class="text-center tracking-status-delivered">
+                <p>PASTA FUNCIONAL</p>
+            </div>
+                <!-- Um bloco desse pra cada Tag -->
+                    <div ng-repeat="item in servController.lista | filter:searchText | orderBy:'tag'">
+                        <div class="tracking-item" ng-if="item.documentos.length > 0">
+                            <h4><span class="glyphicon glyphicon-tag"></span> {{item.tag}}</h4><hr>
+                        </div>
+                        <div class="tracking-item" ng-repeat="subitem in item.documentos | filter:searchText | orderBy:'item.data_fato':true">
+                            
+                            <div class="tracking-icon status-intransit">
+                            <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+                            </svg>
+                            <!-- <i class="fas fa-circle"></i> -->
+                            </div>
+                            <div class="tracking-date">{{subitem.data_fato | date : "dd MMM y"}}
+                                <!-- <span>hour</span> -->
+                            </div>
+                            <div class="tracking-options">
+                                <a ng-href="documentos/baixar/{{subitem.id_arquivo}}" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Baixar
+                                </a>
+                                <div class="btn-group">
+                                    <button ng-click="servController.excluirDocumento(subitem.id_arquivo)" class="btn btn-danger btn-sm">
+                                        <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Excluir
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tracking-content">{{subitem.nome | uppercase}}<span>{{subitem.descricao}}</span></div>
+                        </div>
+                    </div>
+                <!-- Um bloco desse pra cada Tag -->
+                </div>
+
+                <!-- Modelo de visualização geral -->
+                <!-- <hr>
+                <p>Modelo de visualização 2</p>
+                <div class="tracking-list">
+                    <div class="tracking-item" ng-repeat="item in servController.documentos | orderBy:'item.data_fato'">
+                        <div class="tracking-icon status-intransit">
+                        <svg class="svg-inline--fa fa-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                            <path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+                        </svg>
+                        </div>
+                        <div class="tracking-date">{{item.data_fato | date : "dd MMM y"}}
+                        </div>
+                        <div class="tracking-options">
+                            <a ng-href="documentos/baixar/{{item.id_arquivo}}" class="btn btn-default btn-sm">
+                                <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Baixar
+                            </a>
+                            <div class="btn-group">
+                                <button ng-click="servController.excluirDocumento(item.id_arquivo)" class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> Excluir
+                                </button>
+                            </div>
+                        </div>
+                        <div class="tracking-content">{{item.nome | uppercase}}<span>{{item.descricao}}</span></div>
+                    </div>
+                </div> -->
+                <!-- Modelo de visualização geral -->
+                
+        </div>
+            
+        <!-- tracking style timeline end -->
+    </div>
+</div>
