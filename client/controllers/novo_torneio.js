@@ -7,13 +7,16 @@ myApp.controller('NovoTorneioController',
 
 	novotorneioController = this;
 	novotorneioController.user = $cookies.getObject("user_account");
+	$scope.estilo = {idaevolta: false};
 
 	novotorneioController.criarTorneio = function(){
 		console.log('criando novo torneio...');
-		$http.post('/api/sortear',novotorneioController.jogadores).then(function(response) {
+		// alert($scope.estilo.idaevolta);
+		$http.post('/api/sortear', {idaevolta: $scope.estilo.idaevolta,
+			jogadores: novotorneioController.jogadores}).then(function(response) {
 			novotorneioController.lista_partidas = response.data;
 			// console.log(response.data);
-			alert("ssshhhxxRRRRaaaaaiiiiaaaiiiiiii meeeu parxxxxceeiiiroooo!!!! 💦💦💦💦💦 \r\n Éééerr éérrr que comecem os duelos!!");
+			alert("RRRaaaaaiiiiaaaiiiiiii meeeu parxxxxceeiiiroooo!!!! 💦💦💦 \r\nQue comecem os duelos!!");
 			$location.path("/dashboard");
 			// location.reload();
 		});

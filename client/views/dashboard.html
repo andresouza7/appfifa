@@ -4,7 +4,7 @@
 		<li role="presentation" class="active"><a href="#/dashboard"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Ranking</a></li>
 		<li role="presentation"><a href="#/partidas"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Partidas</a></li>
 	</ul>
-	<div ng-controller="DashboardController as dashController">
+	<div ng-controller="DashboardController as dashController" ng-init="dashController.verPartidas()">
 		<!-- <div class="row" ng-init="dashController.pesquisarServidor()">
 			<div class="col-xs-6">
 					<input type="text" class="form-control" placeholder="Filtrar por nome" ng-model="dashController.pesquisar_servidor">
@@ -13,27 +13,36 @@
 		<br> -->
 		<div ng-init="dashController.verPartidaAtual()">
 			<div class="well">
-				<h4 class="duel-round">--------------------- PARTIDA {{dashController.partidaAtual.ordem}} ---------------------</h4>
-				<br>
+					<hr style="border-top: 1px solid black">
+				<h4 class="duel-round">PARTIDA {{dashController.partidaAtual.ordem}} de {{dashController.partidas.length}}</h4>
+				<hr style="border-top: 1px dashed black">
 				<p class="duel-players">{{dashController.partidaAtual.player1 | uppercase}} x {{dashController.partidaAtual.player2 | uppercase}}</p>
-				<!-- <img src="./views/vs_icon.png" style="width:30px;height:30px"> -->
-				<!-- <p class="duel">{{dashController.partidaAtual.player2 | uppercase}}</p> -->
-				<br>
 				<div class="btn-group btn-group-justified" role="group">
 					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalResultado">
+						<button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalResultado" ng-disabled="dashController.partidaAtual.ordem == dashController.partidas.length">
 							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Finalizar
 						</button>
 					</div>
 					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default" ng-click="dashController.pularPartida()">
+						<button type="button" class="btn btn-default" ng-click="dashController.pularPartida()" ng-disabled="dashController.partidaAtual.ordem == dashController.partidas.length">
 							<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Pular
 						</button>
 					</div>
 				</div>
-				
-				
-				<br>
+				<hr style="border-top: 1px dashed black">
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="text-center">Próxima partida: {{dashController.partidas[dashController.partidaAtual.ordem].player1}} x {{dashController.partidas[dashController.partidaAtual.ordem].player2}}</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="text-center">Partidas restantes: {{dashController.partidas.length - dashController.partidaAtual.ordem}}</div>
+					</div>
+					<div class="col-lg-4">
+						<div class="text-center">Tempo estimado: {{dashController.tempoHoras}}h {{dashController.tempoMinutos}}m</div>
+					</div>
+				</div>
+				<!-- <img src="./views/vs_icon.png" style="width:30px;height:30px"> -->
+				<!-- <p class="duel">{{dashController.partidaAtual.player2 | uppercase}}</p> -->
 			</div>
 			
 
@@ -45,11 +54,30 @@
 					  <h4 class="modal-title">Encerrar partida</h4>
 					</div>
 					<div class="modal-body">
-						{{dashController.partidaAtual.player1}}
-						<input type="number" min="0" max="20" ng-model="dashController.partidaAtual.player1_gols">
-						x 
-						<input type="number" min="0" max="20" ng-model="dashController.partidaAtual.player2_gols">
-						{{dashController.partidaAtual.player2}}
+						<div class="result-player1">
+							{{dashController.partidaAtual.player1 | uppercase}}<br>
+							<button type="button" class="btn btn-default" ng-click="dashController.partidaAtual.player1_gols = dashController.partidaAtual.player1_gols + 1">
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default" ng-click="dashController.partidaAtual.player1_gols = dashController.partidaAtual.player1_gols - 1" ng-disabled="dashController.partidaAtual.player1_gols == 0">
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							</button><br>
+							
+							{{dashController.partidaAtual.player1_gols | uppercase}}
+						</div>
+						<div class="result-vs">
+							x
+						</div>
+						<div class="result-player2">
+							{{dashController.partidaAtual.player2_gols | uppercase}}<br>
+							<button type="button" class="btn btn-default" ng-click="dashController.partidaAtual.player2_gols = dashController.partidaAtual.player2_gols + 1">
+								<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							</button>
+							<button type="button" class="btn btn-default" ng-click="dashController.partidaAtual.player2_gols = dashController.partidaAtual.player2_gols - 1" ng-disabled="dashController.partidaAtual.player2_gols == 0">
+								<span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+							</button><br>
+							{{dashController.partidaAtual.player2 | uppercase}}<br>
+						</div>
 					</div>
 					<div class="modal-footer">
 					  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>

@@ -20,6 +20,10 @@ myApp.controller('DashboardController',
 	dashController.verPartidaAtual = function(){
 		$http.get('/api/partidaAtual').then(function(response) {
 			dashController.partidaAtual = response.data;
+
+			var tempo = (dashController.partidas.length - dashController.partidaAtual.ordem)*8;
+			dashController.tempoHoras = Math.trunc(tempo/60);
+			dashController.tempoMinutos = Math.round(((tempo/60)-dashController.tempoHoras)*60);
 			// console.log(response.data);
 			// location.reload();
 		});

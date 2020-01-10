@@ -131,8 +131,10 @@ function sortearPartidasLiga (jogadores, volta) {
 router.post('/sortear', function(req, res){
 	// var lista_jogadores = ["bruno", "calouro", "hugo", "mura","andre", "brotz","vitolino","kinho"];
 	// console.log(req.body);
-	var jogadores = req.body;
-	res.json(sortearPartidasLiga(jogadores, false));
+	// console.log(req.body.idaevolta);
+	var jogadores = req.body.jogadores;
+	var idaevolta = req.body.idaevolta;
+	res.json(sortearPartidasLiga(jogadores, idaevolta));
 
 	Ranking.deleteMany({},function(err,response){
 		jogadores.forEach(function(jogador, index){

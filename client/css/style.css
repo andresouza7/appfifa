@@ -20,6 +20,28 @@
     text-align: center;
 }
 
+.result-player1{
+    font-family: 'Shadows Into Light', sans-serif;
+    color: #d01818;
+    font-size: 32pt;
+    font-weight: bold;
+    text-align: center;
+}
+.result-player2{
+    font-family: 'Shadows Into Light', sans-serif;
+    color: #1065b6;
+    font-size: 32pt;
+    font-weight: bold;
+    text-align: center;
+}
+.result-vs{
+    font-family: 'Shadows Into Light', sans-serif;
+    color: black;
+    font-size: 26pt;
+    font-weight: bold;
+    text-align: center;
+}
+
 .match-finished { background-color: rgb(212, 212, 212); }
 
 .match-current { background-color: rgb(85, 207, 101);}

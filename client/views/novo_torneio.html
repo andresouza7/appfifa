@@ -4,7 +4,7 @@
             <h3 class="panel-title"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Personalizar Torneio</h3>
         </div>
         <div class="panel-body">
-            <h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Jogadores</h4>
+            <h4 class="text-center"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Jogadores</h4>
             <hr>
             <form name="formTorneio">
                 Quantidade de Participantes: 
@@ -13,8 +13,10 @@
                 <div ng-repeat="jogador in novoController.jogadores track by $index">
                     <br><input type="text" class="form-control" ng-model="novoController.jogadores[$index]" required>
                 </div>
-                <br>
+                <hr>
+                <p><label for="volta"><input type="checkbox" id="volta" ng-model="estilo.idaevolta"> Partidas de Ida e Volta</label></p>
                 <!-- <p>debug: {{novoController.jogadores}}</p> -->
+                <br>
                 <button type="button" class="btn btn-primary" ng-click="novoController.criarTorneio()" ng-disabled="!novoController.jogadores">Criar Torneio</button>
                 <!-- <h1>Partidas do torneio</h1>
                 <ul>
